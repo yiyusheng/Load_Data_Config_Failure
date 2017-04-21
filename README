@@ -1,0 +1,81 @@
+UPDATE on 04/19/2017 by yiyusheng.hust@gmail.com
+###### DISK INFO ######
+1.0303_smart_Tencent_disk.csv
+disk information extract from SMART data[201405-201407]
+
+2.d_smart_1021.csv
+SMART data of 20131015-20131021. We can extract disk information from it
+
+###### FAILURE INFO ######
+3.2009.csv - 2013.csv
+failure records from helper database
+
+4.uwork_20120101-20131210.csv
+failure records from uwork database
+
+5.故障单精简_06-09.csv
+failure record from 201406-201409 from yemao
+
+6.d_alarm_34_140701_141130.txt
+failure record from yemao including event_id, ip, fail_id, event_description, fail_time1, fail_time2,******. I don't know where and when it comes.
+
+7.硬盘故障单140101_141231A.txt + 硬盘故障单140101_141231B.txt + disk_fault_list_140101_141231_clear.csv
+The first two files are failure records from yemao. The first one contains the second one. She send this two files to me by accident.
+The third one is the normal version of failure disk[201401-201412] from yemao.
+I merge the first one and the third one to corrlate the svrid and svrnum.
+
+8.硬盘故障单140701_150630.txt
+The formal version of failure disk[201407-201506] with only svrnum
+
+###### HARDWARE ######
+8.num_model.csv
+disk model and its parameters
+
+9.cmdb1104_allattr.csv
+hardware and configure of each server recorded in 20131104
+
+###### USE TIME ######
+10.server_first_use_time_140701_150630.csv
+new version of use time of each svrnum[2015]
+
+11.diskInfo_20160902
+[2014]time when each disk first have SMART record. [id,time,devid,model,svrnum]
+
+12.diskInfo_20160912 and diskInfo_20160912A
+[2014]Online time of each svrnum. Yemao said the latter one is more accurate than the first one.
+
+############################################################
+1.Failure_list_preprocess(helper).R + Failure_list_preprocess(uwork).R + Failure_list_preprocess(ALL).R
+Load data from tow sources and merge them in one[200901-201311]
+Dataset:3, 4, 5
+Output:flist.Rda + uwork2013.Rda + uwork2014.Rda + uwork2014_06_09.Rda
+
+1.failRecordLoad2014.R +  failRecordLoad_1407-1506.R  + load_d_alarm.R
++ merge_id_svrid.R
+Read Failure record from ym.
+Merge svrnum and svrid in one Rda file in merge_id_svrid for [2014]
+Dataset: 6, 7, 8
+Output:failRecord2014.Rda + failRecord_1407-1506.Rda + merge_id_svrid.Rda
+
+2.load_disk_info_from_smart.R
+Load data of disk from two source
+Dataset: 1, 2
+Output: disk_two_lists.Rda
+
+3.Read server from cmdb: serverInfo.R(Disk_number_label.R)
+Dataset: 9
+Output: serverInfo.Rda
+
+4.Generate IO feature from a low level io feature file: ioFeatureLoad.R
+Dataset: NULL
+Output: mean_io.Rda
+
+5.Load all result and merge them: Info_Load.R(attr_load.R)
+Dataset: NULL
+Output: load_ftr_attrid.Rda
+
+6.diskInfoLoad.R + load_use_time_2015.R
+Load use time from svrid of [2014] and [2015]
+The latter one is modified by yemao. She said the last use time of 2015 is wrong, because she mapped the svrid to svrnum of 2014.
+Dataset: 11, 12
+Output: diskInfo0902.Rda + load_use_time_2015.Rda
