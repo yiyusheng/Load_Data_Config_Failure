@@ -38,9 +38,9 @@ check_vm <- function(arr){
 }
 
 # F3. check if ftype_d1/ftype_d2 contains '硬盘故障'. Yes indicates a replacement of bad disk drive.
-check_disk_replacement <- function(df){
+check_disk_replacement <- function(df,valid = 1){
   flag_valid_item <- grepl('硬盘故障',df$ftype_d1)|grepl('硬盘故障',df$ftype_d2)
-  df <- factorX(df[flag_valid_item,])
+  x <- ifelse(valid == 1,df <- factorX(df[flag_valid_item,]),df <- factorX(df[!flag_valid_item,]))
   return(df)
 }
 

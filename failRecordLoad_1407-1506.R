@@ -25,4 +25,9 @@ failRecord$svr_id <- factor(failRecord$svr_id)
 #S3.save
 attr(failRecord,'.internal.selfref') <- NULL
 names(failRecord)[names(failRecord) == 'svr_id'] <- 'svrid'
-save(failRecord,file = file.path(dir_data,'failRecord_1407-1506.Rda'))
+# save(failRecord,file = file.path(dir_data,'failRecord_1407-1506.Rda'))
+# load(file.path(dir_data,'failRecord_1407-1506.Rda'));
+f2015 <- failRecord
+names(f2015) <- c('svrid','finfo','ftype','ftime')
+f2015 <- f2015[,c('svrid','ftime','ftype','finfo')]
+save(f2015,file = file.path(dir_data,'uwork2015.Rda'))
