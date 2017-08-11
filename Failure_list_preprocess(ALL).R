@@ -1,6 +1,5 @@
 #@@@ 合并故障单,计算上架时间
-rm(list = ls())
-source('head.R')
+rm(list = ls());setwd('~/Code/R/Load_Data_Config_Failure/');source('head.R')
 
 # 1. 读取uwork数据
 load(file.path(dir_data,'flist(uwork[2012-2014]).Rda'))

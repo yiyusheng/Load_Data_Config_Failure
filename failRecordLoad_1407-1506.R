@@ -3,8 +3,7 @@
 # Author: yorkyi
 # for 硬盘故障单140701_150701.txt
 # we first use regexp of notepad++ to remove \t ((\t){2,100})
-rm(list = ls())
-source('head.R')
+rm(list = ls());setwd('~/Code/R/Load_Data_Config_Failure/');source('~/rhead')
 require(data.table)
 
 ####################################
